@@ -1,4 +1,5 @@
 @extends('layouts.main')
+
 @section('content')
 <main class="main-content position-relative border-radius-lg">
     <div class="container-fluid py-4">
@@ -9,63 +10,55 @@
                     <i class="fa fa-user fa-3x text-secondary"></i>
                 </div>
             </div>
-            <h4 class="mt-3 text-white">USER447681209904</h4>
+            <h4 class="mt-3 text-white">{{ $user->name }}</h4>
             <p class="text-success mb-0">Online</p>
         </div>
 
         <!-- Form Profile -->
         <div class="card shadow-lg p-4">
-            <form>
+            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
                 <div class="row">
                     <!-- Kolom Kiri -->
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
-                            <label for="username">Nama Pengguna</label>
-                            <input type="text" id="username" class="form-control" placeholder="Masukkan Nama Pengguna">
+                            <label for="name">Nama Pengguna</label>
+                            <input type="text" id="name" name="name" class="form-control" value="{{ $user->name }}" placeholder="Masukkan Nama Pengguna">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" class="form-control" value="{{ $user->username }}" placeholder="Masukkan Username">
                         </div>
                         <div class="form-group mb-3">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" class="form-control" placeholder="Masukkan Alamat E-mail">
+                            <input type="email" id="email" name="email" class="form-control" value="{{ $user->email }}" placeholder="Masukkan Alamat E-mail">
                         </div>
                         <div class="form-group mb-3">
-                            <label for="phone">No. Telp</label>
-                            <input type="text" id="phone" class="form-control" placeholder="Masukkan No Telp">
+                            <label for="role">Role</label>
+                            <select id="role" name="role" class="form-control">
+                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                            </select>
                         </div>
                     </div>
 
                     <!-- Kolom Kanan -->
                     <div class="col-lg-6">
                         <div class="form-group mb-3">
-                            <label for="profilePhoto">Foto Profil</label>
-                            <div class="d-flex">
-                                <input type="file" id="profilePhoto" class="form-control" style="flex: 1;">
-                                <button type="button" class="btn btn-primary ms-2">Unggah Foto</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Baris Kata Sandi -->
-                <div class="row mt-4">
-                    <div class="col-lg-6">
-                        <div class="form-group mb-3">
                             <label for="password">Kata Sandi</label>
-                            <input type="password" id="password" class="form-control" placeholder="Masukkan Kata Sandi">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan Kata Sandi">
                         </div>
-                    </div>
-                    <div class="col-lg-6">
                         <div class="form-group mb-3">
-                            <label for="changePassword">Ubah Kata Sandi</label>
-                            <input type="password" id="changePassword" class="form-control mb-2" placeholder="Masukkan Kata Sandi Saat Ini">
-                            <button type="button" class="btn btn-secondary">Ubah Kata Sandi</button>
+                            <label for="current_password">Kata Sandi Saat Ini</label>
+                            <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Masukkan Kata Sandi Saat Ini">
                         </div>
                     </div>
                 </div>
 
-                <!-- Tombol Simpan dan Edit -->
+                <!-- Tombol Simpan -->
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-success">Simpan</button>
-                    <button type="button" class="btn btn-warning">Edit</button>
                 </div>
             </form>
         </div>

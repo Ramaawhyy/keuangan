@@ -85,8 +85,8 @@
                                 <tr>
                                     <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
                                     <td>{{ $item->nama_barang }}</td>
-                                    <td style="color: {{ $item->kategori == 'Masuk' ? 'green' : 'red' }}; font-weight: bold;">
-                                        {{ $item->kategori }}
+                                    <td>{{ $item->kategori == 'Masuk' ? 'green' : 'red' }}
+                                        {{ $item->kategori }}</td>
                                     </td>
                                     <td>{{ number_format($item->jumlah, 0, ',', '.') }}</td>
                                     <td>
@@ -106,6 +106,27 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5>Stok Barang</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Barang</th>
+                                        <th>Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($stokBarang as $barang)
+                                        <tr>
+                                            <td>{{ $barang->nama_barang }}</td>
+                                            <td>{{ number_format($barang->stok, 0, ',', '.') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <a href="{{ route('inventory.download_csv') }}" class="btn btn-primary">
                         Download CSV

@@ -121,49 +121,4 @@
 </main>
 @endsection
 
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('chart-line').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-            datasets: [
-                {
-                    label: 'Pemasukan',
-                    data: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600],
-                    borderColor: '#4caf50',
-                    borderWidth: 2,
-                    fill: false,
-                },
-                {
-                    label: 'Pengeluaran',
-                    data: [40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480],
-                    borderColor: '#f44336',
-                    borderWidth: 2,
-                    fill: false,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false,
-                    },
-                },
-                y: {
-                    beginAtZero: true,
-                }
-            }
-        }
-    });
-</script>
 @endsection

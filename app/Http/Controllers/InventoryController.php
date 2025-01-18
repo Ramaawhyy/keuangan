@@ -14,7 +14,7 @@ class InventoryController extends Controller
     {
         $kategori = $request->kategori;
 
-        $query = inventory::query();
+        $query = Inventory::query();
 
         if ($kategori) {
             $query->where('kategori', $kategori);
@@ -22,16 +22,16 @@ class InventoryController extends Controller
 
         $inventory = $query->get();
 
-        // Total Pemasukan
-        $totalMasuk = $inventory->where('kategori', 'Masuk')->sum('jumlah');
-
-        // Total Pengeluaran
-        $totalKeluar = $inventory->where('kategori', 'Keluar')->sum('jumlah');
-
-        // Selisih Pemasukan dan Pengeluaran
+        $totalMasuk = Inventory::where('kategori', 'Masuk')->sum('jumlah');
+        $totalKeluar = Inventory::where('kategori', 'Keluar')->sum('jumlah');
         $selisih = $totalMasuk - $totalKeluar;
 
-        return view('inventory.index', compact('inventory', 'totalMasuk', 'totalKeluar', 'selisih'));
+        $stokBarang = Inventory::select('nama_barang')
+            ->selectRaw('SUM(CASE WHEN kategori = "Masuk" THEN jumlah ELSE 0 END) - SUM(CASE WHEN kategori = "Keluar" THEN jumlah ELSE 0 END) as stok')
+            ->groupBy('nama_barang')
+            ->get();
+
+        return view('inventory.index', compact('inventory', 'totalMasuk', 'totalKeluar', 'stokBarang'));
     }
 
     /**
@@ -42,19 +42,21 @@ class InventoryController extends Controller
         return view('inventory.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'tanggal' => 'required|date',
-            'nama_barang' => 'required|string',
-            'supplier' => 'required|string',
-            'kategori' => 'required|string',
-            'jumlah' => 'required|numeric',
-        ]);
 
-        Inventory::create($request->all());
-        return redirect()->route('inventory.index')->with('success', 'Barang berhasil ditambahkan!');
-    }
+    public function store(Request $request)
+{
+    $request->validate([
+        'tanggal' => 'required|date',
+        'nama_barang' => 'required|string',
+        'kategori' => 'required|string',
+        'jumlah' => 'required|numeric',
+    ]);
+
+    Inventory::create($request->all());
+
+    return redirect()->route('inventory.index')->with('success', 'Barang berhasil ditambahkan!');
+}
+
 
     public function show($id)
     {
@@ -73,7 +75,6 @@ class InventoryController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string',
-            'supplier' => 'required|string',
             'kategori' => 'required|in:Masuk,Keluar',
             'jumlah' => 'required|numeric',
         ]);
@@ -113,4 +114,17 @@ class InventoryController extends Controller
 
         return response()->download($filename)->deleteFileAfterSend(true);
     }
+
+    public function laporan()
+    {
+        $monthlyData = Inventory::selectRaw('MONTH(tanggal) as month, YEAR(tanggal) as year, kategori, SUM(jumlah) as total')
+            ->groupBy('month', 'year', 'kategori')
+            ->get();
+
+        $formattedData = $monthlyData->groupBy(['year', 'month']);
+
+        return view('laporan.index', compact('formattedData'));
+    }
+
+
 }

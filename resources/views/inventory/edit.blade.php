@@ -33,7 +33,7 @@
                         <input type="number" class="form-control" id="jumlah" name="jumlah" value="{{ $inventory->jumlah }}" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ route('keuangan.index') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('innventory.index') }}" class="btn btn-secondary">Kembali</a>
                 </form>
             </div>
         </div>

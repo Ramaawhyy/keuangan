@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->string('nama_barang');
-            $table->string('supplier');
             $table->string('kategori');
             $table->integer('jumlah');
             $table->timestamps();
         });
     }
+
+    
 
 
     /**
