@@ -33,7 +33,7 @@ class ProfileController extends Controller
 
         // Jika validasi gagal, kembalikan ke form dengan pesan kesalahan
         if ($validator->fails()) {
-            return redirect()->route('profile.index')->withErrors($validator)->withInput();
+            return redirect()->route('profile.show')->withErrors($validator)->withInput();
         }
 
         // Ambil data pengguna yang sedang login

@@ -85,10 +85,10 @@ class KeuanganController extends Controller
     public function destroy($id)
     {
         $keuangan = Keuangan::findOrFail($id);
-        $keuangan->delete();
-
+        $keuangan->forceDelete();
+    
         return redirect()->route('keuangan.index')->with('success', 'Transaksi berhasil dihapus!');
-    }
+    }    
 
     public function downloadCsv()
 {

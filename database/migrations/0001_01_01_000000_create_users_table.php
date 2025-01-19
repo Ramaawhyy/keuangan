@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('username');
             $table->string('email')->unique(); // Email pengguna (unik)
             $table->string('password'); // Password pengguna (hashed)
-            $table->string('role')->default('admin_besar'); // Role pengguna (misal: admin/user)
+            $table->string('role')->default('adminbesar'); // Role pengguna (misal: admin/user)
             $table->timestamp('email_verified_at')->nullable(); // Verifikasi email
             $table->rememberToken(); // Token untuk fitur "Remember Me"
             $table->timestamps(); // Kolom created_at dan updated_at

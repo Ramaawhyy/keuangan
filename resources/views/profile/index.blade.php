@@ -30,6 +30,10 @@
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username" class="form-control" value="{{ $user->username }}" placeholder="Masukkan Username">
                         </div>
+                    </div>
+
+                    <!-- Kolom Kanan -->
+                    <div class="col-lg-6">
                         <div class="form-group mb-3">
                             <label for="email">E-mail</label>
                             <input type="email" id="email" name="email" class="form-control" value="{{ $user->email }}" placeholder="Masukkan Alamat E-mail">
@@ -40,18 +44,6 @@
                                 <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <!-- Kolom Kanan -->
-                    <div class="col-lg-6">
-                        <div class="form-group mb-3">
-                            <label for="password">Kata Sandi</label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan Kata Sandi">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="current_password">Kata Sandi Saat Ini</label>
-                            <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Masukkan Kata Sandi Saat Ini">
                         </div>
                     </div>
                 </div>

@@ -129,12 +129,6 @@
                             </table>
                         </div>
                     </div>
-
-                    <a href="{{ route('inventory.download_csv') }}" class="btn btn-primary">
-                        Download CSV
-                    </a>                    
-                    </div>
-                    
                 </div>
             </div>
         </div>

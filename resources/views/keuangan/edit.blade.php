@@ -1,11 +1,13 @@
 @extends('layouts.main')
 
 @section('content')
-<main class="main-content position-relative border-radius-lg ">
-    <div class="container mt-4">
-        <h4 class="mb-4">Edit Transaksi</h4>
-        <div class="card">
-            <div class="card-body">
+<main class="main-content position-relative border-radius-lg">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg" style="width: 700px; border-radius: 15px;">
+            <div class="card-header bg-primary text-white text-center" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                <h4 class="mb-0 font-weight-bold text-white">Edit Transaksi</h4>
+            </div>
+            <div class="card-body bg-white">
                 <form action="{{ route('keuangan.update', $keuangan->id) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -28,8 +30,10 @@
                         <label for="jumlah" class="form-label">Jumlah</label>
                         <input type="number" class="form-control" id="jumlah" name="jumlah" value="{{ $keuangan->jumlah }}" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ route('keuangan.index') }}" class="btn btn-secondary">Kembali</a>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <a href="{{ route('keuangan.index') }}" class="btn btn-secondary">Kembali</a>
+                    </div>
                 </form>
             </div>
         </div>

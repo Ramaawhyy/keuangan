@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show');
     Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
     Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::delete('/keuangan/{id}', [KeuanganController::class, 'destroy'])->name('keuangan.destroy');
     Route::get('/inventory/keluar/create', [InventoryController::class, 'keluar'])->name('inventory.keluar.create');
     Route::post('/inventory/keluar/store', [InventoryController::class, 'storeKeluar'])->name('inventory.keluar.store');
     Route::get('/inventory/download-csv', [InventoryController::class, 'downloadCsv'])->name('inventory.download_csv');
@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/pdf', [LaporanController::class, 'downloadPDF'])->name('laporan.pdf');
+
 });
 
 
