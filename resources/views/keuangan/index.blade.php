@@ -105,7 +105,7 @@
                                 <tr>
                                     <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
                                     <td>{{ $item->deskripsi }}</td>
-                                    {{ $item->kategori == 'Masuk' ? 'green' : 'red' }}
+                                    <td class="{{ $item->kategori == 'Masuk' ? 'text-success' : 'text-danger' }}">{{ $item->kategori }}</td>
                                         {{ $item->kategori }}
                                     </td>
                                     <td>Rp.{{ number_format($item->jumlah, 0, ',', '.') }}</td>

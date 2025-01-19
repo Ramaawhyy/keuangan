@@ -8,7 +8,8 @@
             <p class="main-paragraph mb-0" style="color: white; font-weight: bold;">Total Barang: {{ $inventory ? $inventory->count() : 0 }} Barang</p>
         </div>
         <div>
-            <a href="{{ route('inventory.create') }}" class="btn btn-success btn-input-green me-2">INPUT BARANG</a>
+            <a href="{{ route('inventory.create') }}" class="btn btn-success btn-input-green me-2">INPUT BARANG MASUK</a>
+            <a href="{{ route('inventory.keluar.create') }}" class="btn btn-danger btn-input-red me-2">INPUT BARANG KELUAR</a>
         </div>
     </div>
         </form>
@@ -85,7 +86,8 @@
                                 <tr>
                                     <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
                                     <td>{{ $item->nama_barang }}</td>
-                                    <td>{{ $item->kategori == 'Masuk' ? 'green' : 'red' }}
+                                    <td class="{{ $item->kategori == 'Masuk' ? 'text-success' : 'text-danger' }}">{{ $item->kategori }}</td>
+
                                         {{ $item->kategori }}</td>
                                     </td>
                                     <td>{{ number_format($item->jumlah, 0, ',', '.') }}</td>

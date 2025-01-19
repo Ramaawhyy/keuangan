@@ -2,10 +2,10 @@
 
 @section('content')
 <main class="main-content position-relative border-radius-lg">
-    <div class="container mt-5">
+    <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <div class="card shadow-lg">
+                <div class="card shadow-lg mt-5">
                     <div class="card-header bg-primary text-white text-center">
                         <h3 class="text-light">Input Barang</h3>
                     </div>
@@ -34,7 +34,6 @@
                                 <label for="kategori" class="form-label">Kategori</label>
                                 <select name="kategori" class="form-control" required>
                                     <option value="Masuk">Barang Masuk</option>
-                                    <option value="Keluar">Barang Keluar</option>
                                 </select>
                             </div>
                             <div class="mb-3">

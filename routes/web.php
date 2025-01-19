@@ -5,6 +5,7 @@ use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman login
@@ -38,8 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show');
     Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
     Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::get('/inventory/keluar', [InventoryController::class, 'keluar'])->name('inventory.keluar');
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::get('/inventory/keluar/create', [InventoryController::class, 'keluar'])->name('inventory.keluar.create');
+    Route::post('/inventory/keluar/store', [InventoryController::class, 'storeKeluar'])->name('inventory.keluar.store');
     Route::get('/inventory/download-csv', [InventoryController::class, 'downloadCsv'])->name('inventory.download_csv');
 
 
@@ -48,9 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
     });
 
-    Route::get('/laporan', function () {
-        return view('laporan.index');
-    })->name('laporan');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 });
 
 

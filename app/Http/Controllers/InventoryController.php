@@ -22,10 +22,12 @@ class InventoryController extends Controller
 
         $inventory = $query->get();
 
+        // Menghitung total barang masuk dan keluar
         $totalMasuk = Inventory::where('kategori', 'Masuk')->sum('jumlah');
         $totalKeluar = Inventory::where('kategori', 'Keluar')->sum('jumlah');
         $selisih = $totalMasuk - $totalKeluar;
 
+        // Menghitung stok per barang
         $stokBarang = Inventory::select('nama_barang')
             ->selectRaw('SUM(CASE WHEN kategori = "Masuk" THEN jumlah ELSE 0 END) - SUM(CASE WHEN kategori = "Keluar" THEN jumlah ELSE 0 END) as stok')
             ->groupBy('nama_barang')
@@ -42,34 +44,87 @@ class InventoryController extends Controller
         return view('inventory.create');
     }
 
+    public function keluar()
+    {
+        $barangList = Inventory::select('id', 'nama_barang')->get();
+        return view('inventory.keluar', compact('barangList'));
+    }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
-{
-    $request->validate([
-        'tanggal' => 'required|date',
-        'nama_barang' => 'required|string',
-        'kategori' => 'required|string',
-        'jumlah' => 'required|numeric',
-    ]);
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'nama_barang' => 'required|string',
+            'kategori' => 'required|string',
+            'jumlah' => 'required|numeric',
+        ]);
 
-    Inventory::create($request->all());
+        Inventory::create($request->all());
 
-    return redirect()->route('inventory.index')->with('success', 'Barang berhasil ditambahkan!');
-}
+        return redirect()->route('inventory.index')->with('success', 'Barang berhasil ditambahkan!');
+    }
+
+    /**
+     * Store barang keluar.
+     */
+    public function storeKeluar(Request $request)
+    {
+        // Validasi data input
+        $request->validate([
+            'id' => 'required|exists:inventorys,id', // 'id' mengacu pada barang yang dipilih
+            'tanggal' => 'required|date',
+            'jumlah' => 'required|numeric|min:1',
+        ]);
+
+        // Cari barang berdasarkan ID
+        $barang = Inventory::findOrFail($request->id);
+
+        // Validasi stok barang
+        $stok = Inventory::where('nama_barang', $barang->nama_barang)
+            ->selectRaw('SUM(CASE WHEN kategori = "Masuk" THEN jumlah ELSE 0 END) - SUM(CASE WHEN kategori = "Keluar" THEN jumlah ELSE 0 END) as stok')
+            ->groupBy('nama_barang')
+            ->value('stok');
+
+        if ($request->jumlah > $stok) {
+            return redirect()->back()->withErrors(['Jumlah barang keluar melebihi stok yang tersedia!']);
+        }
+
+        // Tambahkan barang keluar
+        Inventory::create([
+            'tanggal' => $request->tanggal,
+            'nama_barang' => $barang->nama_barang, // Menggunakan nama_barang dari barang yang dipilih
+            'kategori' => 'Keluar',
+            'jumlah' => $request->jumlah,
+        ]);
+
+        return redirect()->route('inventory.index')->with('success', 'Barang Keluar berhasil disimpan!');
+    }
 
 
+    /**
+     * Display the specified resource.
+     */
     public function show($id)
     {
         $inventory = Inventory::findOrFail($id);
         return view('inventory.show', compact('inventory'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $inventory = Inventory::findOrFail($id);
         return view('inventory.edit', compact('inventory'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -82,9 +137,12 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail($id);
         $inventory->update($request->all());
 
-        return redirect()->route('inventory.index')->with('success', 'barang berhasil diperbarui!');
+        return redirect()->route('inventory.index')->with('success', 'Barang berhasil diperbarui!');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $inventory = Inventory::findOrFail($id);
@@ -93,13 +151,16 @@ class InventoryController extends Controller
         return redirect()->route('inventory.index')->with('success', 'Barang berhasil dihapus!');
     }
 
+    /**
+     * Export data to CSV.
+     */
     public function downloadCsv()
     {
         $inventory = Inventory::all();
 
         $filename = "data_inventory.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, ['tanggal', 'nama_barang', 'supplier', 'kategori', 'jumlah']);
+        fputcsv($handle, ['tanggal', 'nama_barang', 'kategori', 'jumlah']);
 
         foreach ($inventory as $inventory) {
             fputcsv($handle, [
@@ -115,6 +176,9 @@ class InventoryController extends Controller
         return response()->download($filename)->deleteFileAfterSend(true);
     }
 
+    /**
+     * Generate monthly report.
+     */
     public function laporan()
     {
         $monthlyData = Inventory::selectRaw('MONTH(tanggal) as month, YEAR(tanggal) as year, kategori, SUM(jumlah) as total')
@@ -125,6 +189,4 @@ class InventoryController extends Controller
 
         return view('laporan.index', compact('formattedData'));
     }
-
-
 }
