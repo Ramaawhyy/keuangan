@@ -120,8 +120,10 @@
                                         Rp.{{ number_format($transaksiMasuk, 0, ',', '.') }}
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+55%</span>
-                                        sejak minggu terakhir
+                                        <span class="text-success text-sm font-weight-bolder">
+                                            {{ number_format($transaksiMasukChange, 2) }}%
+                                        </span>
+                                        sejak bulan terakhir
                                     </p>
                                 </div>
                             </div>
@@ -146,8 +148,10 @@
                                         Rp.{{ number_format($pengeluaran, 0, ',', '.') }}
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                        sejak minggu terakhir
+                                        <span class="text-danger text-sm font-weight-bolder">
+                                            {{ number_format($pengeluaranChange, 2) }}%
+                                        </span>
+                                        sejak bulan terakhir
                                     </p>
                                 </div>
                             </div>
@@ -172,8 +176,10 @@
                                         {{ number_format($barangMasuk, 0, ',', '.') }}
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-danger text-sm font-weight-bolder">+12</span>
-                                        sejak minggu terakhir
+                                        <span class="text-success text-sm font-weight-bolder">
+                                            {{ $barangMasukChange > 0 ? '+' : '' }}{{ $barangMasukChange }}
+                                        </span>
+                                        sejak bulan terakhir
                                     </p>
                                 </div>
                             </div>
@@ -198,7 +204,10 @@
                                         {{ number_format($barangKeluar, 0, ',', '.') }}
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">-2</span> sejak minggu terakhir
+                                        <span class="text-success text-sm font-weight-bolder">
+                                            {{ $barangKeluarChange > 0 ? '+' : '' }}{{ $barangKeluarChange }}
+                                        </span>
+                                        sejak bulan terakhir
                                     </p>
                                 </div>
                             </div>
@@ -212,14 +221,16 @@
                 </div>
             </div>
         </div>
+        <!-- Grafik Section -->
         <div class="row mt-4">
+            <!-- Grafik Keuangan -->
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
-                        <h6 class="text-capitalize">Grafik Keuangan</h6>
+                        <h6 class="text-capitalize">Grafik Keuangan (Transaksi Masuk & Keluar)</h6>
                     </div>
                     <div class="card-body p-3">
-                        <canvas id="chartKeuangan" class="chart-canvas" height="300"></canvas>
+                        {!! $keuanganChart->container() !!}
                     </div>
                 </div>
             </div>
@@ -228,128 +239,61 @@
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
-                        <h6 class="text-capitalize">Grafik Inventory</h6>
+                        <h6 class="text-capitalize">Grafik Inventory (Barang Masuk & Keluar)</h6>
                     </div>
                     <div class="card-body p-3">
-                        <canvas id="chartInventory" class="chart-canvas" height="300"></canvas>
+                        {!! $inventoryChart->container() !!}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    </div>
-
     <div class="row mt-4">
-        <div class="col-lg-12 mb-lg-0 mb-4">
-            <div class="card">
-                <div class="card-header pb-0 p-3">
-                    <div class="d-flex justify-content-between align-items-center" style="flex-wrap: wrap; gap: 10px;">
-                        <!-- Pencarian -->
-                        <div class="input-group" style="width: auto; flex: 1; max-width: 150px;">
-                            <span class="input-group-text text-body" style="height: 36px; padding: 5px 10px;">
-                                <i class="fas fa-search" aria-hidden="true"></i>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Cari" style="height: 36px; padding: 5px 5px;">
-                        </div>
-
-                        <!-- Filter Dropdown -->
-                        <select class="form-select" style="width: 115px; height: 36px; padding: 5px 10px;">
-                            <option selected>Bulan</option>
-                            <option>Oktober</option>
-                            <option>November</option>
-                        </select>
-                        <select class="form-select" style="width: 85px; height: 36px; padding: 5px 10px;">
-                            <option selected>Tahun</option>
-                            <option>2024</option>
-                            <option>2025</option>
-                        </select>
-                        <select class="form-select" style="width: 150px; height: 36px; padding: 5px 10px;">
-                            <option selected>Semua Kategori</option>
-                            <option>Kategori 1</option>
-                            <option>Kategori 2</option>
-                        </select>
-                        <select class="form-select" style="width: 150px; height: 36px; padding: 5px 10px;">
-                            <option selected>Semua Partner</option>
-                            <option>Partner 1</option>
-                            <option>Partner 2</option>
-                        </select>
-
-                        <!-- Tombol -->
-                        <button class="btn btn-primary" style="height: 36px; padding: 5px 20px;">Submit</button>
-                        <button class="btn btn-secondary" style="height: 36px; padding: 5px 20px;">Download CSV</button>
-                    </div>
-
-                    <!-- Tabel Data -->
-
-                    <div class="table-responsive">
-                        <table class="table align-items-center">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 10%;">NO</th>
-                                    <th scope="col" style="width: 20%;">Tanggal</th>
-                                    <th scope="col" style="width: 40%;">Deskripsi Transaksi</th>
-                                    <th scope="col" style="width: 20%;">Jumlah</th>
-                                    <th scope="col" style="width: 10%;">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>24/01/2025</td>
-                                    <td>Pembayaran Testing 100</td>
-                                    <td>Rp 100.000</td>
-                                    <td>
-                                        <span class="badge bg-primary">View</span>
-                                        <span class="badge bg-danger">Delete</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>25/01/2025</td>
-                                    <td>Pembayaran Testing 1000</td>
-                                    <td>Rp 130.000</td>
-                                    <td>
-                                        <span class="badge bg-primary">View</span>
-                                        <span class="badge bg-danger">Delete</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>28/01/2025</td>
-                                    <td>Pembayaran Testing 1000</td>
-                                    <td>Rp 150.000</td>
-                                    <td>
-                                        <span class="badge bg-primary">View</span>
-                                        <span class="badge bg-danger">Delete</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <!-- Tabel -->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered align-items-center mb-0 bg-white">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">NO</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Bulan</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Transaksi</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Pemasukan</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Pengeluaran</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Selisih</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($tableData as $month => $data)
+                        <tr>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $month }}</td>
+                            <td class="text-center">{{ $data['transaksi'] }}</td>
+                            <td class="text-center">{{ $data['pemasukan'] ?? 0 }}</td>
+                            <td class="text-center">{{ $data['pengeluaran'] ?? 0 }}</td>
+                            <td class="text-center">{{ $data['selisih'] ?? 0 }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <!-- View All -->
     <div class="card-footer text-center">
-        <a href="#" class="text-primary">View All >></a>
-    </div>
-    </div>
-    </div>
+        <a href="{{ route('keuangan.index') }}" class="text-primary">View All >></a>
     </div>
 
 
-    </div>
+    {!! $keuanganChart->script() !!}
+    {!! $inventoryChart->script() !!}
 </main>
 
 @endsection
 
 
 </body>
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-@endsection
 
 </html>

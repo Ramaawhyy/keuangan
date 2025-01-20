@@ -90,26 +90,4 @@ class KeuanganController extends Controller
         return redirect()->route('keuangan.index')->with('success', 'Transaksi berhasil dihapus!');
     }    
 
-    public function downloadCsv()
-{
-    $keuangans = Keuangan::all();
-
-    $filename = "data_keuangan.csv";
-    $handle = fopen($filename, 'w+');
-    fputcsv($handle, ['Tanggal', 'Deskripsi Transaksi', 'Kategori', 'Jumlah']);
-
-    foreach ($keuangans as $keuangan) {
-        fputcsv($handle, [
-            $keuangan->tanggal,
-            $keuangan->deskripsi,
-            $keuangan->kategori,
-            $keuangan->jumlah
-        ]);
-    }
-
-    fclose($handle);
-
-    return response()->download($filename)->deleteFileAfterSend(true);
-}
-
 }

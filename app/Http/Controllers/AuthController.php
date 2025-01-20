@@ -40,5 +40,7 @@ class AuthController extends Controller
 
         return redirect()->route('login'); // Redirect ke halaman login setelah logout
     }
+
+    
 }
 

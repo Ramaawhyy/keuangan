@@ -10,6 +10,7 @@
                         <h3 class="text-light">Input Barang</h3>
                     </div>
                     <div class="card-body">
+                        <!-- Menampilkan pesan error jika ada -->
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> Ada masalah dengan input Anda.<br><br>
@@ -20,6 +21,15 @@
                                 </ul>
                             </div>
                         @endif
+
+                        <!-- Menampilkan pesan sukses jika ada -->
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <!-- Form Input Barang -->
                         <form action="{{ route('inventory.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">

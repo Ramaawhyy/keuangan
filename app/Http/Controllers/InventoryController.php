@@ -154,27 +154,6 @@ class InventoryController extends Controller
     /**
      * Export data to CSV.
      */
-    public function downloadCsv()
-    {
-        $inventory = Inventory::all();
-
-        $filename = "data_inventory.csv";
-        $handle = fopen($filename, 'w+');
-        fputcsv($handle, ['tanggal', 'nama_barang', 'kategori', 'jumlah']);
-
-        foreach ($inventory as $inventory) {
-            fputcsv($handle, [
-                $inventory->tanggal,
-                $inventory->nama_barang,
-                $inventory->kategori,
-                $inventory->jumlah
-            ]);
-        }
-
-        fclose($handle);
-
-        return response()->download($filename)->deleteFileAfterSend(true);
-    }
 
     /**
      * Generate monthly report.

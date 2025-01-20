@@ -1,5 +1,6 @@
 @extends('layouts.main')
 
+@section('title', 'Profil Pengguna')
 @section('content')
 <main class="main-content position-relative border-radius-lg">
     <div class="container-fluid py-4">

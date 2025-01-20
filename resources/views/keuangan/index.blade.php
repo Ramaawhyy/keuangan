@@ -1,5 +1,6 @@
 @extends('layouts.main')
 
+@section('title', 'Keuangan')
 @section('content')
 <main class="main-content position-relative border-radius-lg ">
     <div class="container mt-4 d-flex align-items-center justify-content-between">
@@ -11,7 +12,6 @@
             <a href="{{ route('keuangan.create') }}" class="btn btn-success btn-input-green me-2">INPUT TRANSAKSI</a>
         </div>
     </div>
-    </form>
 
     <div class="row justify-content-center">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4 mt-4">
@@ -106,8 +106,6 @@
                                     <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
                                     <td>{{ $item->deskripsi }}</td>
                                     <td class="{{ $item->kategori == 'Masuk' ? 'text-success' : 'text-danger' }}">{{ $item->kategori }}</td>
-                                    {{ $item->kategori }}
-                                    </td>
                                     <td>Rp.{{ number_format($item->jumlah, 0, ',', '.') }}</td>
                                     <td>
                                         <a href="{{ route('keuangan.show', $item->id) }}" class="btn btn-info btn-sm">Show</a>
@@ -117,7 +115,6 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">Delete</button>
                                         </form>
-
                                     </td>
                                 </tr>
                                 @empty
