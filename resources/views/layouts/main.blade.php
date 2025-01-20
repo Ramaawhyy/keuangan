@@ -55,6 +55,7 @@
                         <span class="nav-link-text ms-1">Dashboard</span>
                     </a>
                 </li>
+                @if (Auth::user()->role == 'admin_besar' || Auth::user()->role == 'admin_keuangan')
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('keuangan.index') ? 'active' : '' }}" href="{{ route('keuangan.index') }}">
                         <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -63,6 +64,8 @@
                         <span class="nav-link-text ms-1">Keuangan</span>
                     </a>
                 </li>
+                @endif
+                @if (Auth::user()->role == 'admin_besar' || Auth::user()->role == 'admin_inventory')
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('inventory.index') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
                         <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -71,6 +74,7 @@
                         <span class="nav-link-text ms-1">Inventory</span>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::is('laporan.index') ? 'active' : '' }}" href="{{ route('laporan.index') }}">
                         <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
